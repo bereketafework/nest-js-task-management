@@ -16,16 +16,21 @@ import { CreateTaskDto } from './DTOs/create-task.dto';
 import { Task } from './task.entity';
 import { GetTaskFilterDto } from './DTOs/get-task-filter.dto';
 import { AuthGuard } from '@nestjs/passport';
-
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+// @ApiTags('Tasks')
 @Controller('tasks')
-// @UseGuards(AuthGuard())
+// @UseGuards(AuthGuard('jwt'))
+@ApiBearerAuth()
 export class TasksController {
   constructor(private tasksService: TasksService) {}
   @Get('/filter')
+  // @UseGuards(AuthGuard())
   getFilteredTask(@Query(ValidationPipe) filterDto: GetTaskFilterDto) {
     return this.tasksService.getFilteredTask(filterDto);
   }
   @Get('/all')
+  @ApiOperation({ summary: 'Get all tasks' })
+  @UseGuards(AuthGuard())
   getAllTasks(): Promise<Task[]> {
     return this.tasksService.getAllTasks();
   }

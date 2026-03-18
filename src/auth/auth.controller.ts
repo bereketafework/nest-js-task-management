@@ -3,7 +3,6 @@ import {
   Controller,
   Get,
   Post,
-  Req,
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
@@ -12,6 +11,7 @@ import { AuthService } from './auth.service';
 import { signupDTO } from './DTOs/signup.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from './get-user.decorator';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
@@ -30,7 +30,7 @@ export class AuthController {
     return this.authService.signin(signupDto);
   }
   @Post('/verify')
-  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
   test(@GetUser() user: User) {
     console.log(user);
   }
